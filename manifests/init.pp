@@ -1,5 +1,5 @@
 # Class to install and configure deluge daemon
-class deluge {
+class deluge($set_default_daemon=false) {
 
     package {
         'deluged':
@@ -49,6 +49,24 @@ class deluge {
             owner  => deluge,
             group  => deluge;
 
+    }
+
+    if ($set_default_daemon) {
+        file {
+            ['/var/lib/deluge/.config', '/var/lib/deluge/.config/deluge']:
+                ensure => directory,
+                mode   => 0700,
+                owner  => deluge,
+                group  => deluge;
+            '/var/lib/deluge/.config/deluge/web.conf':
+                ensure  => file,
+                replace => no,
+                mode    => 0640,
+                owner   => deluge,
+                group   => deluge,
+                source  => 'puppet:///modules/deluge/web-default-daemon.conf',
+                notify  => Service['deluge-web'];
+        }
     }
 
     service {
