@@ -54,11 +54,13 @@ class deluge {
     service {
         'deluged':
             ensure     => running,
+            enable     => true,
             provider   => upstart,
             subscribe  => File['/etc/init/deluged.conf'];
 
         'deluge-web':
             ensure     => running,
+            enable     => true,
             provider   => upstart,
             subscribe  => File['/etc/init/deluge-web.conf'];
 
