@@ -1,0 +1,21 @@
+{
+  "file": 1,
+  "format": 1
+}{
+  <%
+  options = {}
+  if @set_default_daemon
+    options['default_daemon'] = '127.0.0.1:58846'
+  end
+  if @web_password
+    # Generate a random salt every time this template is evaluated.
+    # This only works because we don't replace the file if it already exists...
+    require 'securerandom'
+    salt = SecureRandom.hex(20)
+    options['pwd_sha1'] = scope.function_sha1(["#{salt}#{@web_password}"])
+    options['pwd_salt'] = salt
+    options['first_login'] = false
+  end
+  -%>
+  <%= options.map { |key, value| "#{key.inspect}: #{value.inspect}" }.join ",\n" %>
+}

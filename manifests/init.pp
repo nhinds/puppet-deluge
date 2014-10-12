@@ -1,5 +1,9 @@
 # Class to install and configure deluge daemon
-class deluge($set_default_daemon=false) {
+class deluge(
+    $set_default_daemon = false,
+    $web_password = undef,
+    $download_location = undef,
+) {
 
     package {
         'deluged':
@@ -49,23 +53,36 @@ class deluge($set_default_daemon=false) {
             owner  => deluge,
             group  => deluge;
 
-    }
-
-    if ($set_default_daemon) {
-        file {
-            ['/var/lib/deluge/.config', '/var/lib/deluge/.config/deluge']:
+        ['/var/lib/deluge/.config', '/var/lib/deluge/.config/deluge']:
                 ensure => directory,
                 mode   => 0700,
                 owner  => deluge,
                 group  => deluge;
+    }
+
+    if ($set_default_daemon or $web_password != undef) {
+        file {
             '/var/lib/deluge/.config/deluge/web.conf':
                 ensure  => file,
                 replace => no,
                 mode    => 0640,
                 owner   => deluge,
                 group   => deluge,
-                source  => 'puppet:///modules/deluge/web-default-daemon.conf',
+                content => template('deluge/web.conf.erb'),
                 notify  => Service['deluge-web'];
+        }
+    }
+
+    if ($download_location != undef) {
+        file {
+            '/var/lib/deluge/.config/deluge/core.conf':
+                ensure  => file,
+                replace => no,
+                mode    => 0640,
+                owner   => deluge,
+                group   => deluge,
+                content => template('deluge/core.conf.erb'),
+                notify  => Service['deluged'];
         }
     }
 
