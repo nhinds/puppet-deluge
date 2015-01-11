@@ -4,6 +4,8 @@ class deluge(
     $web_password = undef,
     $download_location = undef,
     $move_completed_path = unded,
+    $autoadd_enable = false,
+    $autoadd_location = undef
 ) {
 
     package {
