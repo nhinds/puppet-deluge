@@ -2,6 +2,7 @@
 class deluge(
     $set_default_daemon = false,
     $web_password = undef,
+    $web_port = 8112,
     $download_location = undef,
     $move_completed_path = unded,
     $autoadd_enable = false,
