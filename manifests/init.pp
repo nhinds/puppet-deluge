@@ -3,6 +3,7 @@ class deluge(
     $set_default_daemon = false,
     $web_password = undef,
     $download_location = undef,
+    $move_completed_path = unded,
 ) {
 
     package {
