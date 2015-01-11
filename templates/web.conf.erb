@@ -16,6 +16,7 @@
     options['pwd_salt'] = salt
     options['first_login'] = false
   end
+  options['port'] = @web_port
   -%>
   <%= options.map { |key, value| "#{key.inspect}: #{value.inspect}" }.join ",\n" %>
 }
