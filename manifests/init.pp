@@ -3,6 +3,7 @@ class deluge(
     $set_default_daemon = false,
     $web_password = undef,
     $download_location = undef,
+    $additional_groups = undef,
 ) {
 
     package {
@@ -26,6 +27,7 @@ class deluge(
             managehome => true,
             system     => true,
             gid        => 'deluge',
+            groups     => $additional_groups,
             require    => Group['deluge'];
     }
 
